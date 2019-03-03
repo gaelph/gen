@@ -12,6 +12,9 @@ gen <command> [opts]
 ```
 `<command>` and `[opts]` depend on your config files, see below.
 
+## Examples
+Look in the `.gen` directory of this project to have more complete examples.
+
 ## Configuratiom
 By default, `gen` looks for its configuration in a `.gen` directory
 in the current working directory.
