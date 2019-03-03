@@ -1,17 +1,18 @@
+const type = require('gen')
+
 module.exports = {
-  // adds the "index" command to the gen-cli
-  index: {
-    // adds the --name option the gen-cli
+  // adds the "module" command to the gen cli
+  module: {
     params: {
-      name: String
+      // adds the --module_name option the gen cli
+      // adds a "module_name" variable to the template's context
+      module_name: type.String() // function to parse the command line input
     },
-    // will create a directory whith the name passed as the "name" option to the
-    // cli, containing an index.js file based on the index.js.hbs template
+    // will create a directory with the named after the "module_name" cli option,
+    // containing an index.js file based on the index.js.hbs template
     tree: {
-      "{{name}}": {
-        "index.js": {
-          template: "index.js"
-        }
+      "{{module_name}}": {
+        "index.js": "index.js.hbs"
       }
     }
   }

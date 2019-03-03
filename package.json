@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "description": "A directory structure generator",
   "main": "index.js",
+  "bin": {
+    "gen": "bin/gen.js"
+  },
   "scripts": {
-    "start": "node index.js",
+    "start": "node bin/gen.js",
     "test": "jest --coverage"
   },
   "repository": {
@@ -31,6 +34,7 @@
     "handlebars-helpers": "^0.10.0"
   },
   "devDependencies": {
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "mock-fs": "^4.8.0"
   }
 }

@@ -2,11 +2,21 @@
 A directory structure and file generator.
 
 ## Install
+
 ```shell
+# Local install
+npm i -D gen
+```
+```sh
+# Global install
 npm i -g gen
+
+# In each project directory
+npm link gen
 ```
 
 ## Usage
+After you've edited your configuration:
 ```
 gen <command> [opts]
 ```
@@ -15,9 +25,8 @@ gen <command> [opts]
 ## Examples
 Look in the `.gen` directory of this project to have more complete examples.
 
-## Configuratiom
-By default, `gen` looks for its configuration in a `.gen` directory
-in the current working directory.
+## Configuration
+By default, `gen` looks for its configuration in `.gen/` in the current working directory.
 You can override this path with the `GEN_PATH` environnement variable.
 
 `.gen` structure:
@@ -28,7 +37,6 @@ You can override this path with the `GEN_PATH` environnement variable.
 ```
 
 File generation uses Handlebars templates located at `<GEN_PATH>/templates`.
-Template files must have the `.hbs` extension.
 
 ### Simple example
 Let's say you want to automate the process of creating a nodejs module, using
@@ -48,43 +56,117 @@ Where `index.js` exports a single function.
     ```
 
  - `.gen/config.js`
-    ```javascript
+    ```js
+    const type = require('gen')
+
     module.exports = {
       // adds the "module" command to the gen cli
       module: {
         params: {
           // adds the --module_name option the gen cli
           // adds a "module_name" variable to the template's context
-          module_name: String // function to parse the command line input
+          module_name: type.String() // function to parse the command line input
         },
-        // will create a directory with the named after the "module_name" cli option,
+        // will create a directory named after the "module_name" cli option,
         // containing an index.js file based on the index.js.hbs template
         tree: {
           "{{module_name}}": {
-            "index.js": {
-              template: "index.js"
-            }
+            "index.js": "index.js.hbs"
           }
         }
       }
     }
     ```
 
-#### Result
-To generate a new module, simple call:
+#### Generating an `example` module
+To generate the `example` module, simply call:
 ```shell
 gen module --module_name example
 ```
 
-It will result in creating the following structure in your current working directory:
+It will create the following structure in your current working directory:
 ```
 example/
 └── index.js
 ```
 
-`example/index.js`
-```javascript
+`example/index.js`:
+```js
 module.exports = function example() {
 
+}
+```
+
+### Parameter types
+> **NOTICE**
+> If you have installed `gen` globally, you will need to link it to your project to use included type parsers.
+>`npm link gen`
+
+Start your config file with:
+```js
+const type = require('gen')
+// type.String()
+// type.Array()
+// type.Map()
+// ...
+```
+
+#### `type.String()`, `type.Number()`, `type.Boolean()`
+Parses the input into either a String, Number, or Boolean types
+
+#### `type.Array(separator = ",")`
+Parses the input into an array of strings.
+
+```js
+// config.js
+const example = {
+  tree: {
+    // directory structure
+  }
+  params: {
+    list: type.Array()
+  }
+}
+```
+
+```shell
+# genaration command
+gen example --list apple,banana,orange
+```
+
+```js
+// Resulting template context
+{
+  "list": [ "apple", "banana", "orange" ]
+}
+```
+
+#### `type.Map(entrySeparator = ",", keyValueSeparator ":")`
+Parses the input into an object.
+
+```js
+// config.js
+const example = {
+  tree: {
+    // directory structure
+  }
+  params: {
+    properties: type.Map()
+  }
+}
+```
+
+```shell
+# genaration command
+gen example --properties email:null,isOk:true
+```
+
+```js
+// Resulting template context
+{
+  "properties": {
+    "email": "null",
+    "isOk": "true"
+  }
 }
 ```
