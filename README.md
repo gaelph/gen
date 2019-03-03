@@ -1,5 +1,18 @@
-# gGen
-A directory structure and file generator.
+# gGen [![NPM version](https://badge.fury.io/js/ggen.svg)](https://npmjs.org/package/ggen) ![Tests](https://img.shields.io/badge/tests-20%2F20-brightgreen.svg) ![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen.svg)
+> A directory structure and file generator.
+
+gGen allows you to easily create template directory structures and template files for your project.
+
+You can generate any kind of files
+- Java classes, interfaces...
+- Golang files
+- React Components
+- Redux Reducers
+- Redux Sagas
+- `index.js` files based on directory content
+- CSS
+- HTML
+- And many more !
 
 ## Install
 

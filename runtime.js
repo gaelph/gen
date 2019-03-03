@@ -163,8 +163,16 @@ function mkDirTree (TEMPLATES_PATH, vars, dir, parent = process.cwd()) {
   })
 }
 
+/* istanbul ignore next */
 function run_init(argv) {
   run(argv, { GGEN_PATH: path.join(__dirname, 'init') })
+
+  refresh_ggen(argv)
+}
+
+function refresh_ggen(argv) {
+  const [one, two, ..._] = argv
+  run(['refresh', '--configs', 'true'], { GGEN_PATH: path.join(__dirname, 'init') })
 }
 
 /**
@@ -199,5 +207,6 @@ module.exports = {
   createFile,
   mkDirTree,
   run,
-  run_init
+  run_init,
+  refresh_ggen,
 }

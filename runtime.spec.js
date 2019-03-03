@@ -4,7 +4,7 @@ const fs = require('fs')
 const type = require('./index')
 const rfs = jest.requireActual('fs')
 
-const indexTemplate = rfs.readFileSync('.gen/templates/index.js.hbs')
+const indexTemplate = rfs.readFileSync('.ggen/templates/index.js.hbs')
 
 
 jest.mock('fs')
@@ -28,7 +28,7 @@ describe("Runtime", () => {
       }
     })
 
-    expect(TEMPLATES_PATH).toEqual(path.join(process.cwd(), '.gen', 'templates'))
+    expect(TEMPLATES_PATH).toEqual(path.join(process.cwd(), '.ggen', 'templates'))
   })
 
   it("gets vars from the command line", () => {
@@ -102,12 +102,12 @@ describe("Runtime", () => {
   it("doesn't create a directory if it exists", () => {
     fs.existsSync.mockName('exists')
 
-    runtime.createDir('.gen')
-    expect(fs.mkdirSync.mock.calls).not.toContain('.gen')
+    runtime.createDir('.ggen')
+    expect(fs.mkdirSync.mock.calls).not.toContain('.ggen')
   })
 
   it("creates a file", () => {
-    const TEMPLATES_PATH = '.gen/templates'
+    const TEMPLATES_PATH = '.ggen/templates'
     const parent = process.cwd()
     const file = 'index.js'
     const template = 'index.js.hbs'
@@ -127,7 +127,7 @@ describe("Runtime", () => {
   })
 
   it("creates the directory structure", () => {
-    const TEMPLATES_PATH = '.gen/templates'
+    const TEMPLATES_PATH = '.ggen/templates'
     const tree = {
       "{{module_name}}": {
         "index.js": "index.js.hbs"
@@ -137,7 +137,7 @@ describe("Runtime", () => {
       module_name: "test"
     }
 
-    runtime.mkDirTree(TEMPLATES_PATH, vars, tree, '')
+    runtime.mkDirTree(TEMPLATES_PATH, vars, tree)
 
     expect(fs.mkdirSync).toBeCalled()
     expect(fs.writeFileSync).toBeCalled()
