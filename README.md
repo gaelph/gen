@@ -1,42 +1,42 @@
-# Gen
+# gGen
 A directory structure and file generator.
 
 ## Install
 
 ```shell
 # Local install
-npm i -D gen
+npm i -D ggen
 ```
 ```sh
 # Global install
-npm i -g gen
+npm i -g ggen
 
 # In each project directory
-npm link gen
+npm link ggen
 ```
 
 ## Usage
 After you've edited your configuration:
 ```
-gen <command> [opts]
+ggen <command> [opts]
 ```
 `<command>` and `[opts]` depend on your config files, see below.
 
 ## Examples
-Look in the `.gen` directory of this project to have more complete examples.
+Look in the `.ggen` directory of this project to have more complete examples.
 
 ## Configuration
-By default, `gen` looks for its configuration in `.gen/` in the current working directory.
-You can override this path with the `GEN_PATH` environnement variable.
+By default, `ggen` looks for its configuration in `.ggen/` in the current working directory.
+You can override this path with the `GGEN_PATH` environnement variable.
 
-`.gen` structure:
+`.ggen` structure:
 ```
-.gen
+.ggen
 ├── templates/  -- Handlebars template files for file generation
 └── config.js   -- Main configuration file
 ```
 
-File generation uses Handlebars templates located at `<GEN_PATH>/templates`.
+File generation uses Handlebars templates located at `<GGEN_PATH>/templates`.
 
 ### Simple example
 Let's say you want to automate the process of creating a nodejs module, using
@@ -48,22 +48,22 @@ the following structure:
 
 Where `index.js` exports a single function.
 #### Template and config files
- - `.gen/templates/index.js.hbs`
+ - `.ggen/templates/index.js.hbs`
     ```handlebars
     module.exports = function {{ module_name }}() {
 
     }
     ```
 
- - `.gen/config.js`
+ - `.ggen/config.js`
     ```js
-    const type = require('gen')
+    const type = require('ggen')
 
     module.exports = {
-      // adds the "module" command to the gen cli
+      // adds the "module" command to the ggen cli
       module: {
         params: {
-          // adds the --module_name option the gen cli
+          // adds the --module_name option the ggen cli
           // adds a "module_name" variable to the template's context
           module_name: type.String() // function to parse the command line input
         },
@@ -81,7 +81,7 @@ Where `index.js` exports a single function.
 #### Generating an `example` module
 To generate the `example` module, simply call:
 ```shell
-gen module --module_name example
+ggen module --module_name example
 ```
 
 It will create the following structure in your current working directory:
@@ -99,12 +99,12 @@ module.exports = function example() {
 
 ### Parameter types
 > **NOTICE**
-> If you have installed `gen` globally, you will need to link it to your project to use included type parsers.
->`npm link gen`
+> If you have installed `ggen` globally, you will need to link it to your project to use included type parsers.
+>`npm link ggen`
 
 Start your config file with:
 ```js
-const type = require('gen')
+const type = require('ggen')
 // type.String()
 // type.Array()
 // type.Map()
@@ -131,7 +131,7 @@ const example = {
 
 ```shell
 # genaration command
-gen example --list apple,banana,orange
+ggen example --list apple,banana,orange
 ```
 
 ```js
@@ -158,7 +158,7 @@ const example = {
 
 ```shell
 # genaration command
-gen example --properties email:null,isOk:true
+ggen example --properties email:null,isOk:true
 ```
 
 ```js

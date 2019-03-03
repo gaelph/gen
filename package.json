@@ -1,10 +1,10 @@
 {
-  "name": "gen",
+  "name": "ggen",
   "version": "0.1.0",
   "description": "A directory structure generator",
   "main": "index.js",
   "bin": {
-    "gen": "bin/gen.js"
+    "ggen": "bin/gen.js"
   },
   "scripts": {
     "start": "node bin/gen.js",

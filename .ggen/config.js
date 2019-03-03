@@ -1,4 +1,4 @@
-const type = require('gen')
+const type = require('ggen')
 
 module.exports = {
   // adds the "module" command to the gen cli
