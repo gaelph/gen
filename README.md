@@ -14,6 +14,11 @@ npm i -g ggen
 # In each project directory
 npm link ggen
 ```
+Create default configuration:
+```sh
+# From your project directory
+ggen init
+```
 
 ## Usage
 After you've edited your configuration:

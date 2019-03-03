@@ -18,6 +18,7 @@ Handlebars.registerHelper(helpers.string())
  * @return {{config: object, TEMPLATES_PATH: string}}
  */
 function loadConfig({ GGEN_PATH }) {
+  console.log(GGEN_PATH)
   GGEN_PATH = GGEN_PATH || path.join(process.cwd(), '.ggen')
 
   const config = require(path.join(GGEN_PATH, 'config.js'))
@@ -162,6 +163,10 @@ function mkDirTree (TEMPLATES_PATH, vars, dir, parent = process.cwd()) {
   })
 }
 
+function run_init(argv) {
+  run(argv, { GGEN_PATH: path.join(__dirname, 'init') })
+}
+
 /**
  * Main function
  * @param {string[]} argv process.argv
@@ -193,5 +198,6 @@ module.exports = {
   createDir,
   createFile,
   mkDirTree,
-  run
+  run,
+  run_init
 }
