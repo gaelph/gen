@@ -148,7 +148,7 @@ const example = {
 ```
 
 ```shell
-# genaration command
+# generation command
 ggen example --list apple,banana,orange
 ```
 
