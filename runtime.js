@@ -106,12 +106,13 @@ function run(argv, env) {
 
 
   // Pick the proper config
-  // TODO: handle error case
-  const { tree, vars } = pickConfig(config, argv)
-
-
-
-  mkDirTree(TEMPLATES_PATH, vars, tree)
+  try {
+    const { tree, vars } = pickConfig(config, argv)
+    mkDirTree(TEMPLATES_PATH, vars, tree)
+  }
+  catch (error) {
+    console.log(error.message)
+  }
 }
 
 module.exports = {
