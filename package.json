@@ -1,6 +1,6 @@
 {
   "name": "ggen",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A directory structure generator",
   "main": "index.js",
   "bin": {
