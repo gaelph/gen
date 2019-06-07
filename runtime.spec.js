@@ -8,6 +8,7 @@ const indexTemplate = rfs.readFileSync('.ggen/templates/index.js.hbs')
 
 
 jest.mock('fs')
+jest.setTimeout(15000)
 
 describe("Runtime", () => {
 
@@ -141,5 +142,31 @@ describe("Runtime", () => {
 
     expect(fs.mkdirSync).toBeCalled()
     expect(fs.writeFileSync).toBeCalled()
+  })
+
+  it('finds the path to the global node_modules', async () => {
+    const modulesPath = await runtime.globalModulesRoot()
+
+    console.log(modulesPath)
+  })
+
+  it('finds the path to the local node_modules', async () => {
+    const modulesPath = await runtime.localModulesRoot()
+
+    console.log(modulesPath)
+  })
+
+  it('loads global plugins', async () => {
+    const modulesRoot = runtime.globalModulesRoot()
+    let plugins = await runtime.loadPluginsFrom(modulesRoot)
+
+    console.log(plugins)
+  })
+
+  it('loads local plugins', async () => {
+    const modulesRoot = runtime.localModulesRoot()
+    let plugins = await runtime.loadPluginsFrom(modulesRoot)
+
+    console.log(plugins)
   })
 })

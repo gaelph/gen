@@ -5,6 +5,74 @@ const Handlebars = require('handlebars')
 const helpers = require('handlebars-helpers')
 Handlebars.registerHelper(helpers.string())
 
+const { exec } = require('child_process')
+
+/**
+ * Retreives the path to the global node_modules
+ * @return {Promise<string, Error>}
+ */
+function globalModulesRoot() {
+  return new Promise((resolve, reject) => {
+    exec('npm root -g', (err, res) => {
+      if (err) reject(err)
+      else resolve(res)
+    })
+  })
+}
+
+/**
+ * Retreives the path to the local node_modules
+ * @return {Promise<string, Error>}
+ */
+function localModulesRoot() {
+  return new Promise((resolve, reject) => {
+    exec('npm root', (err, res) => {
+      if (err) reject(err)
+      else resolve(res)
+    })
+  })
+}
+
+/**
+ * Loads and require every ggen-plugins from the global node_modules
+ * @return {Promise<Object.<string, *>, Error>} An object where every property
+ * is the plugin name without ggen-plugin prefix associated with the required
+ * module
+ */
+function loadPluginsFrom(modulesRoot) {
+  return new Promise((resolve, reject) => {
+    exec('npm -g ls --depth 0 --json', (err, res) => {
+      if (err) {
+        console.log(err)
+        reject(err)
+        return
+      }
+      else {
+        const modules = JSON.parse(res)
+
+        let mods = Object.keys(modules.dependencies)
+        .filter(name => name.startsWith('ggen-plugin'))
+        .map(p => {
+          const name = p.replace('ggen-plugin-', '')
+          console.log('Trying to load', path.join(modulesRoot, p))
+          let mod = require(path.join(modulesRoot, p))
+
+          mod = mod.module ? mod.module : mod
+
+          return {name, module: mod}
+        })
+        .reduce((m, {name, module: mod}) => {
+          m[name] = mod
+
+          return m
+        }, {})
+
+        resolve(mods)
+      }
+    })
+  })
+}
+
 /**
  * Loads the configuration file.
  * Defaults to $PWD/.ggen/config.js
@@ -21,7 +89,9 @@ function loadConfig({ GGEN_PATH }) {
   console.log(GGEN_PATH)
   GGEN_PATH = GGEN_PATH || path.join(process.cwd(), '.ggen')
 
-  const config = require(path.join(GGEN_PATH, 'config.js'))
+  let config = require(path.join(GGEN_PATH, 'config.js'))
+
+  config = config.module ? config.module : config
 
   const TEMPLATES_PATH = path.join(GGEN_PATH, 'templates')
 
@@ -62,7 +132,7 @@ function pickConfig(config, argv) {
  * @param {string[]} argv remained of process.argv after the command have been used
  * @return {Object.<string, *>} The context for the template engine
  */
-function getVars(params, argv) {
+function getVars(params = {}, argv = []) {
   const optionsDefinition = Object.entries(params).map(([name, type]) => {
     return { name, alias: name.charAt(0), type }
   })
@@ -209,4 +279,7 @@ module.exports = {
   run,
   run_init,
   refresh_ggen,
+  localModulesRoot,
+  globalModulesRoot,
+  loadPluginsFrom
 }
